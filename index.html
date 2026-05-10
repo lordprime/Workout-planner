@@ -38,16 +38,9 @@
       /* Dynamic animated mesh-like background */
       background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), #ffffff);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
       overflow-x: hidden;
       width: 100%;
       max-width: 100vw;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     /* Scroll Reveal Animation Classes */
@@ -108,8 +101,6 @@
       width: fit-content;
       max-width: 95%;
       background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       padding: 10px 15px;
       display: flex;
       gap: 10px;
@@ -164,9 +155,7 @@
 
     /* Glassmorphic Cards */
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.96);
       border: 1px solid var(--glass-border);
       border-radius: 30px;
       padding: 45px;
@@ -500,6 +489,22 @@
   table {
     min-width: 700px;
   }
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+section,
+.card,
+.grid,
+.workout-day {
+  max-width: 100%;
+}
+
+.workout-day {
+  overflow: hidden;
 }
   </style>
 </head>
