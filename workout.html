@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite 12-Week Hybrid Performance System</title>
+
+  <!-- Importing a cute, rounded font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fafafc; /* Very soft off-white */
+      color: #4b5563; /* Soft dark gray for readability */
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+      padding: 50px 20px;
+      text-align: center;
+      border-bottom: none;
+      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.15);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      color: #60a5fa; /* Aesthetic soft blue */
+      font-weight: 800;
+    }
+
+    header p {
+      color: #6b7280;
+      max-width: 900px;
+      margin: auto;
+      font-weight: 600;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    nav a {
+      color: #60a5fa;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 25px; /* Pill shape */
+      background: #eff6ff;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      background: #60a5fa;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: auto;
+      padding: 40px 0;
+    }
+
+    .card {
+      background: #ffffff;
+      border: none;
+      border-radius: 24px;
+      padding: 35px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(148, 163, 184, 0.2); /* Soft glowing shadow */
+    }
+
+    .card h2 {
+      color: #3b82f6; /* Deeper blue */
+      margin-bottom: 20px;
+      font-size: 2.2rem;
+      font-weight: 800;
+    }
+
+    .card h3 {
+      color: #93c5fd;
+      margin-top: 20px;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: #4b5563;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .workout-day {
+      background: #f0f9ff; /* Very light sky blue */
+      border: 1px solid #e0f2fe;
+      border-radius: 20px;
+      padding: 25px;
+      transition: transform 0.3s ease;
+    }
+    
+    .workout-day:hover {
+      transform: translateY(-3px);
+    }
+
+    .workout-day h3 {
+      color: #3b82f6;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .exercise {
+      padding: 12px 15px;
+      background: #ffffff;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      border: 1px solid #e0f2fe;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .exercise strong {
+      color: #3b82f6;
+    }
+
+    .checklist {
+      margin-top: 15px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      background: #f0f9ff;
+      padding: 15px;
+      border-radius: 15px;
+      border: 1px solid #e0f2fe;
+      font-weight: 600;
+    }
+
+    input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: #60a5fa; /* Native cute checkbox color */
+    }
+
+    .progress-container {
+      width: 100%;
+      background: #e0f2fe;
+      border-radius: 25px;
+      overflow: hidden;
+      margin-top: 25px;
+      height: 24px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #93c5fd, #3b82f6);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 25px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 20px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(148, 163, 184, 0.2);
+    }
+
+    table th,
+    table td {
+      border-bottom: 1px solid #e0f2fe;
+      padding: 15px;
+      text-align: left;
+      background: #ffffff;
+    }
+
+    table th {
+      background: #eff6ff;
+      color: #3b82f6;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    table td input[type="text"],
+    table td input[type="number"] {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e0f2fe;
+      border-radius: 10px;
+      font-family: inherit;
+      color: #4b5563;
+      background: #fafafc;
+      transition: all 0.2s ease;
+    }
+
+    table td input[type="number"] {
+      min-width: 70px;
+    }
+
+    table td input[type="text"]:focus,
+    table td input[type="number"]:focus {
+      outline: none;
+      border-color: #60a5fa;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      background: #eff6ff;
+      color: #60a5fa;
+      margin-top: 50px;
+      font-weight: 600;
+    }
+
+    @media(max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      nav {
+        gap: 8px;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Elite 12-Week Hybrid Performance System</h1>
+  <p>
+    A complete athlete-style hybrid performance system engineered for aesthetics, strength, athleticism, conditioning, mobility, recovery, nervous-system management, and long-term sustainable progression.
+  </p>
+</header>
+
+<nav>
+  <a href="#overview">Overview</a>
+  <a href="#phases">12 Weeks</a>
+  <a href="#weekly">Weekly Split</a>
+  <a href="#checklist">Checklist</a>
+  <a href="#recovery">Recovery</a>
+  <a href="#tracking">Tracking</a>
+</nav>
+
+<div class="container">
+
+  <section id="overview" class="card">
+    <h2>Program Philosophy</h2>
+
+    <p style="margin-bottom:20px; color:#6b7280;">
+      This is not a pure bodybuilding split.
+      This is a hybrid athletic hypertrophy system designed for sustainable high-frequency training while maximizing aesthetics, strength, recovery, conditioning, and athletic performance simultaneously.
+    </p>
+
+    <div class="grid">
+      <div class="workout-day">
+        <h3>Primary Objectives</h3>
+        <ul>
+          <li>Build dense aesthetic muscle</li>
+          <li>Increase compound strength</li>
+          <li>Improve athleticism</li>
+          <li>Maintain joint health</li>
+          <li>Improve conditioning</li>
+          <li>Improve mental clarity</li>
+          <li>Sustain training for full 12 weeks</li>
+        </ul>
+      </div>
+
+      <div class="workout-day">
+        <h3>Hybrid Training Structure</h3>
+        <ul>
+          <li>Heavy neural days</li>
+          <li>Volume hypertrophy days</li>
+          <li>Athletic bodyweight integration</li>
+          <li>Daily mobility</li>
+          <li>Conditioning integration</li>
+          <li>Recovery architecture</li>
+        </ul>
+      </div>
+    </div>
+
+    <br>
+    <h2>Program Overview</h2>
+
+    <div class="grid">
+      <div>
+        <h3>Profile</h3>
+        <ul>
+          <li>Intermediate trainee (3 years experience)</li>
+          <li>Gym: McFIT Germany</li>
+          <li>Height: 5'7</li>
+          <li>Weight: 76 kg</li>
+          <li>Training Frequency: 7 Days/Week</li>
+          <li>Nutrition: Maintenance/Recomp</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Main Goals</h3>
+        <ul>
+          <li>Aesthetic physique</li>
+          <li>Strength development</li>
+          <li>Athleticism</li>
+          <li>Conditioning</li>
+          <li>Mental clarity</li>
+          <li>Mobility and recovery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="phases" class="card">
+    <h2>Optimized Weekly Architecture</h2>
+
+    <div class="grid">
+      <div class="workout-day"><h3>Monday</h3><p>Heavy Chest + Triceps + Push Power</p></div>
+      <div class="workout-day"><h3>Tuesday</h3><p>Heavy Back + Biceps + Pull Strength</p></div>
+      <div class="workout-day"><h3>Wednesday</h3><p>Heavy Legs + Light Shoulders + Core Stability</p></div>
+      <div class="workout-day"><h3>Thursday</h3><p>Abs + Forearms + Conditioning + Mobility</p></div>
+      <div class="workout-day"><h3>Friday</h3><p>Chest + Triceps Hypertrophy + Explosive Push</p></div>
+      <div class="workout-day"><h3>Saturday</h3><p>Back + Biceps Hypertrophy + Athletic Pull</p></div>
+      <div class="workout-day"><h3>Sunday</h3><p>Heavy Shoulders + Light Legs + Recovery Conditioning</p></div>
+    </div>
+
+    <br>
+
+    <div class="workout-day">
+      <h3>Elite Hybrid Session Flow</h3>
+      <ul>
+        <li>1. CNS Warmup (5 mins)</li>
+        <li>2. Dynamic Mobility (5–8 mins)</li>
+        <li>3. Activation Drills (3–5 mins)</li>
+        <li>4. Main Compound Lift</li>
+        <li>5. Secondary Compound</li>
+        <li>6. Hypertrophy Block</li>
+        <li>7. Bodyweight Athletic Block</li>
+        <li>8. Conditioning Finisher</li>
+        <li>9. Static Stretch + Breathing</li>
+      </ul>
+
+      <p style="margin-top:15px; color:#3b82f6; font-weight: bold;">
+        Correct sequencing for hybrid athletes: POWER → STRENGTH → HYPERTROPHY → BODYWEIGHT → CONDITIONING → MOBILITY
+      </p>
+    </div>
+
+    <br>
+    <h2>12-Week Structure</h2>
+
+    <table>
+      <tr>
+        <th>Phase</th>
+        <th>Weeks</th>
+        <th>Focus</th>
+        <th>Rep Style</th>
+      </tr>
+
+      <tr>
+        <td>Foundation Accumulation</td>
+        <td>1–4</td>
+        <td>Technique, work capacity, hypertrophy base</td>
+        <td>10–15 reps</td>
+      </tr>
+
+      <tr>
+        <td>Strength-Hypertrophy</td>
+        <td>5–8</td>
+        <td>Strength + denser musculature</td>
+        <td>6–10 reps</td>
+      </tr>
+
+      <tr>
+        <td>Peak Hybrid Phase</td>
+        <td>9–12</td>
+        <td>Athletic performance + peak aesthetics</td>
+        <td>4–8 heavy / 12–20 isolation</td>
+      </tr>
+    </table>
+  </section>
+
+  <section id="weekly" class="card">
+    <h2>Weekly Training Split</h2>
+
+    <div class="grid">
+
+      <div class="workout-day">
+        <h3>Monday — Heavy Chest + Triceps + push power</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> Incline walk -5 mins</div>
+        <div class="exercise"><strong>Mobility:</strong> Band pull-aparts — 2×20, Arm circles — 20 each direction, Scapular pushups — 2×15, Shoulder dislocations with resistance band — 2×15, Thoracic rotations — 10 each side</div>
+        <div class="exercise"><strong>Activation:</strong> Pushup plank hold — 45 sec, Light cable flyes — 2×20, Empty bar bench press — 2 warmup sets</div>
+        
+        <div class="exercise"><strong>Explosive Pushups:</strong> 4×5 Bodyweight Explode aggressively from floor. </div>
+        <div class="exercise"><strong>Bench Press:</strong> Phase 1: 4×10 | Phase 2: 5×6–8 | Phase 3: 5×4–6</div>
+        <div class="exercise"><strong>Incline DB Press:</strong> 4×8–12, Controlled eccentric.</div>
+        <div class="exercise"><strong>Cable Chest Flyes:</strong> 3×15–20, Slow stretch. </div>
+        <div class="exercise"><strong>Weighted chest Dips:</strong> 4×8–12, If bodyweight easy → add weight.</div>
+        <div class="exercise"><strong>Close-Grip Bench press:</strong> 4×8–10</div>
+        <div class="exercise"><strong>Overhead Rope Tricep Extensions:</strong> 3×12–15</div>
+        <div class="exercise"><strong>Deficit Pushups:</strong> 2×AMRAP</div>
+
+        <div class="exercise"><strong>Finisher:</strong> Assault Bike Intervals - 10 mins, 20 sec sprint and 40 sec easy</div>
+        <div class="exercise"><strong>Stretch:</strong> Hold 45 sec each. Doorway chest stretch, Overhead tricep stretch, Child’s pose, Cobra stretch, Pec minor wall stretch</div>
+      </div>
+
+      <div class="workout-day">
+        <h3>Tuesday — Heavy Back + Biceps</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> Rowing -5 mins, dead hangs, thoracic rotations</div>
+        <div class="exercise"><strong>Mobility:</strong> Cat-cow stretch — 15 reps, Band lat stretch — 45 sec, Dead hangs — 2×30 sec, Thoracic opener rotations — 10 each side </div>
+         <div class="exercise"><strong>Activation:</strong>Straight-arm pulldowns — 2×20, Scapular pullups — 2×10</div>
+        <div class="exercise"><strong>Explosive Pullups:</strong> 4×5</div>
+        <div class="exercise"><strong>Weighted Pullups:</strong> 4×6–10</div>
+        <div class="exercise"><strong>Barbell bent over Rows:</strong> 4×8–10</div>
+        <div class="exercise"><strong>Chest Supported Rows:</strong> 4×10–12</div>
+        <div class="exercise"><strong>wide-grip Lat Pulldowns:</strong> 3×12–15</div>
+        <div class="exercise"><strong>Single-Arm Dumbbell Rows:</strong> 3×10–12 each side</div>
+        <div class="exercise"><strong>EZ Bar Curls:</strong> 4×8–12</div>
+        <div class="exercise"><strong> Incline Dumbbell Curls:</strong> 4×8–12</div>
+        <div class="exercise"><strong>Hammer Curls:</strong> 3×12–15</div>
+        
+        <div class="exercise"><strong>Finisher:</strong> Rowing Ergometer 8 mins steady Zone 2 pace. </div>
+        <div class="exercise"><strong>Stretch:</strong> Hanging lat stretch, bicep wall stretch, Seated forward fold, Thread the needle, Upper trap stretch </div>
+      </div>
+
+      <div class="workout-day">
+        <h3>Wednesday — Heavy Legs + Light Shoulders</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> Stairmaster -5 mins</div>
+        <div class="exercise"><strong>Mobility:</strong> Deep squat hold — 60 sec, Walking lunges — 2×20, Leg swings — 15 each, Hip openers — 10 each side, Ankle mobility rocks — 15 each </div>
+        <div class="exercise"><strong>Activation:</strong> Glute bridges — 2×20, Bodyweight squats — 2×20</div>
+        <div class="exercise"><strong>Box Jumps:</strong> 4×5</div>
+        <div class="exercise"><strong>Barbell back Squats:</strong> Phase 1: 4×10 Phase 2: 5×6–8 Phase 3: 5×4–6progression</div>
+        <div class="exercise"><strong>Romanian Deadlifts:</strong> 4×8–10</div>
+        <div class="exercise"><strong>Leg Press:</strong> 3×12–15</div>
+        <div class="exercise"><strong>Bulgarian Split Squats:</strong> 3×10 each leg </div>
+        <div class="exercise"><strong>standing Calf Raises:</strong> 5×15–20</div>
+        <div class="exercise"><strong>seated Lateral Raises:</strong> 4×15–20</div>
+        <div class="exercise"><strong> Rear delt flyes:</strong> 4×15–20</div>
+
+        <div class="exercise"><strong>Incline Walk Finisher:</strong> 12 mins Steady incline pace. </div>
+        <div class="exercise"><strong>Stretch:</strong> Pigeon pose, couch stretch, hamstring stretch, Calf wall stretch, Butterfly stretch</div>
+      </div>
+
+      <div class="workout-day">
+        <h3>Thursday — Abs + Forearms + Mobility. Purpose: Neural recovery day disguised as training.</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> pulse raise : light cycling -5 mins </div>
+        <div class="exercise"><strong>Mobility flow :</strong> World’s greatest stretch, Cat-cow, Thoracic rotations, Hip flexor mobility, Shoulder openers - 2 rounds.</div>
+
+        <div class="exercise"><strong>Hanging Leg Raises:</strong> 4×15</div>
+        <div class="exercise"><strong>Ab Wheel Rollouts:</strong> 4×10–15</div>
+        <div class="exercise"><strong>Cable Crunches:</strong> 4×15</div>
+        <div class="exercise"><strong> Russian twists :</strong> 3 * 20 each side</div>
+        <div class="exercise"><strong> side plank </strong> 3× 45 sec each</div>
+        <div class="exercise"><strong>  Farmer carry walk</strong> 4* 40m heavy</div>
+        <div class="exercise"><strong> Reverse EZ-Bar Curls </strong> 3× 15 </div>
+        <div class="exercise"><strong> wrist curls </strong> 3×20 </div>
+        <div class="exercise"><strong> zottman curl / dead hangs </strong> 3× 45 sec each</div>
+
+
+        <div class="exercise"><strong>Conditioning:</strong> Sled Pushes / Battle Ropes / Assault Bike / Shadow Boxing - 15 mins </div>
+        <div class="exercise"><strong>Mobility:</strong> Jefferson curl stretch, Wrist flexor stretch, Wrist extensor stretch, Cobra pose, Deep breathing - 10 mins total.</div>
+      </div>
+
+      <div class="workout-day">
+        <h3>Friday — Chest Hypertrophy + Explosive Push</h3> 
+
+        
+        <div class="exercise"><strong>Warmup:</strong> Incline walk -5 mins</div>
+        <div class="exercise"><strong>Mobility:</strong> Band pull-aparts — 2×20, Arm circles — 20 each direction, Scapular pushups — 2×15, Shoulder dislocations with resistance band — 2×15, Thoracic rotations — 10 each side</div>
+        <div class="exercise"><strong>Activation:</strong> Pushup plank hold — 45 sec, Light cable flyes — 2×20, Empty bar bench press — 2 warmup sets</div>
+        
+        <div class="exercise"><strong> bench Press:</strong> 4×10–15</div>
+        <div class="exercise"><strong>Incline Machine Press:</strong> 4×10–15</div>
+        <div class="exercise"><strong>Flat Dumbell Press:</strong> 4×10–12</div>
+        <div class="exercise"><strong>Flat Dumbell flyes:</strong> 4×10–12</div>
+        <div class="exercise"><strong>Ring Pushups/ Archer pushups:</strong> 3×AMRAP</div>
+        <div class="exercise"><strong>Dips:</strong> 3×AMRAP</div>
+        <div class="exercise"><strong> Rope Pushdowns:</strong> 4×12–15</div>
+        <div class="exercise"><strong> reverse tricep curls</strong> 3×12–15</div>
+        
+        <div class="exercise"><strong>Finisher:</strong> 10 burpees  </div>
+        <div class="exercise"><strong>Stretch:</strong> Chest opener stretch, Tricep stretch, Thoracic opener, Child’s pose </div>
+      </div>
+
+      <div class="workout-day">
+        <h3>Saturday — Back Hypertrophy + Athletic Pull</h3> 
+
+         <h3>Tuesday — Heavy Back + Biceps</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> Rowing -5 mins, dead hangs, thoracic rotations</div>
+        <div class="exercise"><strong>Mobility:</strong> Cat-cow stretch — 15 reps, Band lat stretch — 45 sec, Dead hangs — 2×30 sec, Thoracic opener rotations — 10 each side </div>
+        <div class="exercise"><strong>Activation:</strong>Straight-arm pulldowns — 2×20, Scapular pullups — 2×10</div>
+
+        
+        <div class="exercise"><strong>Chinups:</strong> 4×AMRAP</div>
+        <div class="exercise"><strong>T-Bar Rows:</strong> 4×8–12</div>
+        <div class="exercise"><strong>Single Arm Cable Rows:</strong> 4×12</div>
+        <div class="exercise"><strong>Straight Arm Pulldowns:</strong> 3×15–20</div>
+        <div class="exercise"><strong> Inverted Rows:</strong> 3×15–20</div>
+        <div class="exercise"><strong>Preacher Curls:</strong> 4×10–12</div>
+        <div class="exercise"><strong>Cable Curls:</strong> 4×10–12</div>
+        <div class="exercise"><strong> Hammer Curls:</strong> 4×10–12</div>
+        <div class="exercise"><strong>Renegade Rows:</strong> 3×12</div>
+
+        <div class="exercise"><strong>Conditioning:</strong>  Battle Rope Intervals -10 rounds (20s hard / 40s easy)</div>
+        <div class="exercise"><strong>Stretch:</strong> Hanging stretch, Lat stretch, Bicep stretch, Thoracic rotation stretch </div>
+      </div>
+      
+
+      <div class="workout-day">
+        <h3>Sunday — Heavy Shoulders + Light Legs + Recovery Conditioning</h3>
+
+        <div class="exercise"><strong>Warmup:</strong> Incline walk — 5 mins </div>
+        <div class="exercise"><strong>Mobility:</strong> Shoulder CARs — 10 each, Band pull-aparts — 20, Hip mobility flow, Deep squat hold — 60 sec</div>
+<div class="exercise"><strong>Activation:</strong> Light lateral raises, Empty bar overhead press</div>
+
+        <div class="exercise"><strong>Push Press shoulder:</strong> 4×5</div>
+        <div class="exercise"><strong>Standing Overhead press:</strong> 5×6–8</div>
+        <div class="exercise"><strong>Arnold Press:</strong> 4×8–12</div>
+        <div class="exercise"><strong>Upraight rows :</strong> 4×8–12</div>
+        <div class="exercise"><strong>Cable Laterals raises :</strong> 4×15–20</div>
+        <div class="exercise"><strong>Walking Lunges:</strong> 3×20</div>
+        <div class="exercise"><strong> seated Leg Curls:</strong> 3×15–20</div>
+        <div class="exercise"><strong> Leg extensions :</strong> 3×15–20</div>
+        <div class="exercise"><strong>Pistol Squat Practice:</strong> 3×AMRAP</div>
+
+        <div class="exercise">Recovery conditioning <strong>Zone 2 Cardio:</strong> 15 mins nasal breathing</div>
+        <div class="exercise"><strong>Stretch:</strong> Shoulder stretch, Hip flexor stretch, Hamstring stretch, Quad stretch, Deep breathing cooldown </div>
+
+    </div>
+  </section>
+
+  <section id="checklist" class="card">
+    <h2>Daily Execution Checklist</h2>
+
+    <div class="checklist">
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Completed warmup and mobility</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Finished main workout</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Completed conditioning finisher</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Completed stretching cooldown</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Hit protein target</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>Drank 3–4L water</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>8000–12000 steps completed</span>
+      </div>
+
+      <div class="checklist-item">
+        <input type="checkbox" class="task">
+        <span>7.5–9 hours sleep target</span>
+      </div>
+
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <p id="progressText" style="margin-top:15px; color:#3b82f6; font-weight: bold; font-size: 1.1rem;">
+      Progress: 0%
+    </p>
+
+  </section>
+
+  <section id="tracking" class="card">
+  <h2>90-Day Workout Tracking System</h2>
+
+  <p style="margin-bottom:20px;color:#6b7280;">
+    Daily tracking system from 11/05/2026 through the next 12 weeks. All progress automatically saves using browser localStorage and works perfectly on Vercel deployment.
+  </p>
+
+  <div style="overflow-x:auto;">
+    <table id="trackingTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Workout</th>
+          <th>Completed</th>
+          <th>Cardio</th>
+          <th>Mobility</th>
+          <th>Sleep</th>
+          <th>Protein</th>
+          <th>Weight (kg)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="recovery" class="card">
+    <h2>Recovery System</h2>
+
+    <div class="grid">
+
+      <div>
+        <h3>Daily Recovery</h3>
+        <ul>
+          <li>7.5–9 hours sleep</li>
+          <li>3–4L water</li>
+          <li>Mobility before bed</li>
+          <li>Post-workout protein</li>
+          <li>Electrolytes</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Deload Weeks</h3>
+        <ul>
+          <li>Week 4</li>
+          <li>Week 8</li>
+          <li>Reduce weights 15–20%</li>
+          <li>Reduce sets 40%</li>
+          <li>No failure training</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Execution Rules</h3>
+        <ul>
+          <li>Technique over ego</li>
+          <li>Recovery drives growth</li>
+          <li>Progressive overload matters</li>
+          <li>Mobility is mandatory</li>
+          <li>Consistency over motivation</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  12-Week Hybrid Performance-Hypertrophy System | Built for sustainable progression, aesthetics, strength, and athleticism.
+</footer>
+
+<script>
+  const checkboxes = document.querySelectorAll('.task');
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const checked = document.querySelectorAll('.task:checked').length;
+
+    const percentage = Math.round((checked / total) * 100);
+
+    progressBar.style.width = percentage + '%';
+    progressText.textContent = `Progress: ${percentage}%`;
+
+    localStorage.setItem('fitnessChecklist', JSON.stringify(
+      Array.from(checkboxes).map(cb => cb.checked)
+    ));
+  }
+
+  function loadChecklist() {
+    const saved = JSON.parse(localStorage.getItem('fitnessChecklist'));
+
+    if(saved) {
+      checkboxes.forEach((cb, index) => {
+        cb.checked = saved[index];
+      });
+    }
+
+    updateProgress();
+  }
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', updateProgress);
+  });
+
+  loadChecklist();
+const trackingBody = document.querySelector('#trackingTable tbody');
+
+const split = [
+  'Heavy Chest + Triceps + Push Power',
+  'Heavy Back + Biceps + Pull Strength',
+  'Heavy Legs + Light Shoulders',
+  'Abs + Forearms + Conditioning',
+  'Chest + Triceps Hypertrophy',
+  'Back + Biceps Athletic Pull',
+  'Heavy Shoulders + Light Legs'
+];
+
+function generateTracking() {
+  const startDate = new Date('2026-05-11');
+
+  for(let i = 0; i < 90; i++) {
+    const current = new Date(startDate);
+    current.setDate(startDate.getDate() + i);
+
+    const row = document.createElement('tr');
+
+    const saved = JSON.parse(localStorage.getItem('track-' + i)) || {};
+
+    row.innerHTML = `
+      <td>${current.toDateString()}</td>
+      <td>${split[i % 7]}</td>
+      <td><input type="checkbox" class="tracker" data-id="${i}" ${saved.completed ? 'checked' : ''}></td>
+      <td><input type="checkbox" class="tracker-cardio" data-id="${i}" ${saved.cardio ? 'checked' : ''}></td>
+      <td><input type="checkbox" class="tracker-mobility" data-id="${i}" ${saved.mobility ? 'checked' : ''}></td>
+      <td><input type="checkbox" class="tracker-sleep" data-id="${i}" ${saved.sleep ? 'checked' : ''}></td>
+      <td><input type="checkbox" class="tracker-protein" data-id="${i}" ${saved.protein ? 'checked' : ''}></td>
+      <td><input type="number" step="0.1" class="tracker-weight" data-id="${i}" value="${saved.weight || ''}" placeholder="kg"></td>
+      <td><input type="text" class="tracker-note" data-id="${i}" value="${saved.note || ''}" placeholder="Performance / fatigue / PRs"></td>
+    `;
+
+    trackingBody.appendChild(row);
+  }
+
+  document.querySelectorAll('.tracker, .tracker-cardio, .tracker-mobility, .tracker-sleep, .tracker-protein, .tracker-weight, .tracker-note').forEach(el => {
+    el.addEventListener('change', saveTracking);
+  });
+}
+
+function saveTracking() {
+  for(let i = 0; i < 90; i++) {
+    const data = {
+      completed: document.querySelector('.tracker[data-id="' + i + '"]')?.checked || false,
+      cardio: document.querySelector('.tracker-cardio[data-id="' + i + '"]')?.checked || false,
+      mobility: document.querySelector('.tracker-mobility[data-id="' + i + '"]')?.checked || false,
+      sleep: document.querySelector('.tracker-sleep[data-id="' + i + '"]')?.checked || false,
+      protein: document.querySelector('.tracker-protein[data-id="' + i + '"]')?.checked || false,
+      weight: document.querySelector('.tracker-weight[data-id="' + i + '"]')?.value || '',
+      note: document.querySelector('.tracker-note[data-id="' + i + '"]')?.value || ''
+    };
+
+    localStorage.setItem('track-' + i, JSON.stringify(data));
+  }
+}
+
+generateTracking();
+</script>
+
+</body>
+</html>
