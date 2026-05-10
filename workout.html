@@ -5,10 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elite 12-Week Hybrid Performance System</title>
 
-  <!-- Importing a cute, rounded font -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Importing premium typography: Outfit for headers, Nunito for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons for aesthetic visuals -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #60a5fa;
+      --primary-dark: #1e3a8a;
+      --bg-gradient-1: #f8fafc;
+      --bg-gradient-2: #eff6ff;
+      --bg-gradient-3: #e0f2fe;
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.6);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -17,272 +33,450 @@
 
     body {
       font-family: 'Nunito', sans-serif;
-      background: #fafafc; /* Very soft off-white */
-      color: #4b5563; /* Soft dark gray for readability */
+      color: var(--text-main);
       line-height: 1.7;
+      /* Dynamic animated mesh-like background */
+      background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), #ffffff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Scroll Reveal Animation Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     header {
-      background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
-      padding: 50px 20px;
+      padding: 80px 20px 60px;
       text-align: center;
-      border-bottom: none;
-      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(96,165,250,0.15) 0%, rgba(255,255,255,0) 70%);
+      z-index: -1;
+      border-radius: 50%;
     }
 
     header h1 {
-      font-size: 3rem;
-      margin-bottom: 12px;
-      color: #60a5fa; /* Aesthetic soft blue */
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 15px;
+      /* Gradient text */
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-weight: 800;
+      letter-spacing: -1px;
     }
 
     header p {
-      color: #6b7280;
-      max-width: 900px;
+      color: var(--text-muted);
+      max-width: 800px;
       margin: auto;
       font-weight: 600;
+      font-size: 1.15rem;
     }
 
     nav {
       position: sticky;
-      top: 0;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      padding: 15px;
+      top: 20px;
+      margin: 0 auto 40px auto;
+      width: fit-content;
+      max-width: 95%;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 10px 15px;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
       z-index: 999;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+      border: 1px solid var(--glass-border);
     }
 
     nav a {
-      color: #60a5fa;
+      color: var(--primary);
       text-decoration: none;
-      padding: 10px 18px;
-      border-radius: 25px; /* Pill shape */
-      background: #eff6ff;
-      transition: all 0.3s ease;
+      padding: 10px 22px;
+      border-radius: 30px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--primary);
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease;
+      border-radius: 30px;
     }
 
     nav a:hover {
-      background: #60a5fa;
       color: #ffffff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
+    }
+
+    nav a:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
     }
 
     .container {
       width: 95%;
-      max-width: 1400px;
+      max-width: 1300px;
       margin: auto;
-      padding: 40px 0;
+      padding-bottom: 60px;
     }
 
+    /* Glassmorphic Cards */
     .card {
-      background: #ffffff;
-      border: none;
-      border-radius: 24px;
-      padding: 35px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(148, 163, 184, 0.2); /* Soft glowing shadow */
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--bg-gradient-3);
+      padding-bottom: 15px;
     }
 
     .card h2 {
-      color: #3b82f6; /* Deeper blue */
-      margin-bottom: 20px;
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary-dark);
       font-size: 2.2rem;
       font-weight: 800;
     }
 
+    .card-icon {
+      color: var(--primary);
+      width: 32px;
+      height: 32px;
+    }
+
     .card h3 {
-      color: #93c5fd;
-      margin-top: 20px;
-      margin-bottom: 12px;
-      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary);
+      margin-top: 25px;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.4rem;
     }
 
-    ul {
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 8px;
-      color: #4b5563;
-    }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 10px; color: var(--text-muted); font-weight: 600; }
+    li::marker { color: var(--primary-light); }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
+      gap: 30px;
     }
 
     .workout-day {
-      background: #f0f9ff; /* Very light sky blue */
-      border: 1px solid #e0f2fe;
-      border-radius: 20px;
-      padding: 25px;
-      transition: transform 0.3s ease;
+      background: #ffffff;
+      border: 1px solid var(--bg-gradient-3);
+      border-radius: 24px;
+      padding: 30px;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      position: relative;
+      overflow: hidden;
     }
     
+    .workout-day::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
     .workout-day:hover {
-      transform: translateY(-3px);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.08);
+      border-color: var(--primary-light);
+    }
+
+    .workout-day:hover::after {
+      transform: scaleX(1);
     }
 
     .workout-day h3 {
-      color: #3b82f6;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
+      color: var(--primary-dark);
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .exercise {
-      padding: 12px 15px;
-      background: #ffffff;
+      padding: 16px 20px;
+      background: var(--bg-gradient-1);
       margin-bottom: 12px;
-      border-radius: 12px;
-      border: 1px solid #e0f2fe;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-radius: 16px;
+      border: 1px solid var(--bg-gradient-3);
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .exercise:hover {
+      background: #ffffff;
+      border-color: var(--primary-light);
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
     }
 
     .exercise strong {
-      color: #3b82f6;
+      color: var(--primary);
+      font-size: 1rem;
+      font-family: 'Outfit', sans-serif;
     }
 
-    .checklist {
-      margin-top: 15px;
-    }
+    /* Interactive Custom Checkboxes */
+    .checklist { margin-top: 20px; }
 
     .checklist-item {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 18px;
       margin-bottom: 15px;
-      background: #f0f9ff;
-      padding: 15px;
-      border-radius: 15px;
-      border: 1px solid #e0f2fe;
-      font-weight: 600;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 20px;
+      border: 1px solid var(--bg-gradient-3);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
+    }
+    
+    .checklist-item:hover {
+      border-color: var(--primary-light);
+      background: var(--bg-gradient-1);
+      transform: scale(1.01);
     }
 
     input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--primary-light);
+      border-radius: 8px;
+      background: #ffffff;
       cursor: pointer;
-      accent-color: #60a5fa; /* Native cute checkbox color */
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    input[type="checkbox"]::after {
+      content: '✔';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input[type="checkbox"]:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: rotate(360deg);
+    }
+
+    input[type="checkbox"]:checked::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .checklist-item span {
+      transition: all 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked + span {
+      color: var(--primary);
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    /* Animated Progress Bar */
     .progress-container {
       width: 100%;
-      background: #e0f2fe;
-      border-radius: 25px;
+      background: var(--bg-gradient-3);
+      border-radius: 30px;
       overflow: hidden;
-      margin-top: 25px;
-      height: 24px;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      margin-top: 35px;
+      height: 28px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
     }
 
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #93c5fd, #3b82f6);
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 25px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      border-radius: 30px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shimmer effect on progress bar */
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      100% { left: 200%; }
+    }
+
+    /* Modern Tracking Table */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 20px;
+      border: 1px solid var(--bg-gradient-3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      background: #ffffff;
     }
 
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-top: 20px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(148, 163, 184, 0.2);
+      border-collapse: collapse;
+      min-width: 900px;
     }
 
-    table th,
-    table td {
-      border-bottom: 1px solid #e0f2fe;
-      padding: 15px;
+    table th, table td {
+      padding: 18px 20px;
       text-align: left;
-      background: #ffffff;
+      border-bottom: 1px solid var(--bg-gradient-3);
+      font-size: 0.95rem;
     }
 
     table th {
-      background: #eff6ff;
-      color: #3b82f6;
-      font-weight: 800;
+      background: var(--bg-gradient-1);
+      color: var(--primary-dark);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 0.85rem;
       letter-spacing: 1px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
+    table tr {
+      transition: background 0.2s ease;
+    }
+
+    table tr:hover {
+      background: var(--bg-gradient-1);
+    }
+
+    /* Minimalist Inputs inside Table */
     table td input[type="text"],
     table td input[type="number"] {
       width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #e0f2fe;
-      border-radius: 10px;
+      padding: 12px 16px;
+      border: 1px solid var(--bg-gradient-3);
+      border-radius: 12px;
       font-family: inherit;
-      color: #4b5563;
-      background: #fafafc;
-      transition: all 0.2s ease;
+      color: var(--text-main);
+      background: #ffffff;
+      transition: all 0.3s ease;
+      font-weight: 600;
     }
 
-    table td input[type="number"] {
-      min-width: 70px;
-    }
+    table td input[type="number"] { min-width: 90px; }
 
     table td input[type="text"]:focus,
     table td input[type="number"]:focus {
       outline: none;
-      border-color: #60a5fa;
-      background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      transform: translateY(-1px);
+    }
+
+    table td input[type="checkbox"] {
+      width: 24px; height: 24px; border-radius: 6px;
     }
 
     footer {
       text-align: center;
       padding: 40px 20px;
-      background: #eff6ff;
-      color: #60a5fa;
-      margin-top: 50px;
-      font-weight: 600;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
     }
 
     @media(max-width: 768px) {
-      header h1 {
-        font-size: 2.2rem;
-      }
-
-      nav {
-        gap: 8px;
-      }
-
-      nav a {
-        font-size: 0.85rem;
-        padding: 8px 12px;
-      }
-      
-      .card {
-        padding: 20px;
-      }
+      .card { padding: 25px; border-radius: 20px; }
+      nav { top: 10px; border-radius: 20px; }
+      nav a { padding: 8px 14px; font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Elite 12-Week Hybrid Performance System</h1>
+<header class="reveal">
+  <h1>Elite 12-Week Hybrid Workout Program.</h1>
   <p>
-    A complete athlete-style hybrid performance system engineered for aesthetics, strength, athleticism, conditioning, mobility, recovery, nervous-system management, and long-term sustainable progression.
+     U got it bitch, Just go to gym !!
   </p>
 </header>
 
-<nav>
+<nav class="reveal">
   <a href="#overview">Overview</a>
   <a href="#phases">12 Weeks</a>
   <a href="#weekly">Weekly Split</a>
@@ -293,17 +487,19 @@
 
 <div class="container">
 
-  <section id="overview" class="card">
-    <h2>Program Philosophy</h2>
+  <section id="overview" class="card reveal">
+    <div class="card-header">
+      <i data-lucide="target" class="card-icon"></i>
+      <h2>Program Philosophy</h2>
+    </div>
 
-    <p style="margin-bottom:20px; color:#6b7280;">
-      This is not a pure bodybuilding split.
-      This is a hybrid athletic hypertrophy system designed for sustainable high-frequency training while maximizing aesthetics, strength, recovery, conditioning, and athletic performance simultaneously.
+    <p style="margin-bottom:25px; color:var(--text-muted); font-size: 1.1rem;">
+      This is a hybrid athletic hypertrophy system designed for sustaining high-frequency training while maximizing aesthetics, strength, recovery, conditioning, and athletic performance simultaneously.
     </p>
 
     <div class="grid">
       <div class="workout-day">
-        <h3>Primary Objectives</h3>
+        <h3><i data-lucide="crosshair"></i> Primary Objectives</h3>
         <ul>
           <li>Build dense aesthetic muscle</li>
           <li>Increase compound strength</li>
@@ -316,7 +512,7 @@
       </div>
 
       <div class="workout-day">
-        <h3>Hybrid Training Structure</h3>
+        <h3><i data-lucide="layers"></i> Hybrid Training Structure</h3>
         <ul>
           <li>Heavy neural days</li>
           <li>Volume hypertrophy days</li>
@@ -329,11 +525,14 @@
     </div>
 
     <br>
-    <h2>Program Overview</h2>
+    <div class="card-header" style="margin-top: 20px;">
+      <i data-lucide="user" class="card-icon"></i>
+      <h2>Program Overview</h2>
+    </div>
 
     <div class="grid">
-      <div>
-        <h3>Profile</h3>
+      <div class="workout-day">
+        <h3><i data-lucide="file-text"></i> Profile</h3>
         <ul>
           <li>Intermediate trainee (3 years experience)</li>
           <li>Gym: McFIT Germany</li>
@@ -344,8 +543,8 @@
         </ul>
       </div>
 
-      <div>
-        <h3>Main Goals</h3>
+      <div class="workout-day">
+        <h3><i data-lucide="flag"></i> Main Goals</h3>
         <ul>
           <li>Aesthetic physique</li>
           <li>Strength development</li>
@@ -358,8 +557,11 @@
     </div>
   </section>
 
-  <section id="phases" class="card">
-    <h2>Optimized Weekly Architecture</h2>
+  <section id="phases" class="card reveal">
+    <div class="card-header">
+      <i data-lucide="calendar" class="card-icon"></i>
+      <h2>Optimized Weekly Architecture</h2>
+    </div>
 
     <div class="grid">
       <div class="workout-day"><h3>Monday</h3><p>Heavy Chest + Triceps + Push Power</p></div>
@@ -373,8 +575,8 @@
 
     <br>
 
-    <div class="workout-day">
-      <h3>Elite Hybrid Session Flow</h3>
+    <div class="workout-day reveal" style="margin-top: 20px;">
+      <h3><i data-lucide="zap"></i> Elite Hybrid Session Flow</h3>
       <ul>
         <li>1. CNS Warmup (5 mins)</li>
         <li>2. Dynamic Mobility (5–8 mins)</li>
@@ -387,57 +589,60 @@
         <li>9. Static Stretch + Breathing</li>
       </ul>
 
-      <p style="margin-top:15px; color:#3b82f6; font-weight: bold;">
+      <p style="margin-top:20px; color:var(--primary); font-family: 'Outfit', sans-serif; font-weight: 800; padding: 15px; background: var(--bg-gradient-2); border-radius: 12px;">
         Correct sequencing for hybrid athletes: POWER → STRENGTH → HYPERTROPHY → BODYWEIGHT → CONDITIONING → MOBILITY
       </p>
     </div>
 
     <br>
-    <h2>12-Week Structure</h2>
+    <div class="card-header" style="margin-top: 20px;">
+      <i data-lucide="bar-chart-2" class="card-icon"></i>
+      <h2>12-Week Structure</h2>
+    </div>
 
-    <table>
-      <tr>
-        <th>Phase</th>
-        <th>Weeks</th>
-        <th>Focus</th>
-        <th>Rep Style</th>
-      </tr>
-
-      <tr>
-        <td>Foundation Accumulation</td>
-        <td>1–4</td>
-        <td>Technique, work capacity, hypertrophy base</td>
-        <td>10–15 reps</td>
-      </tr>
-
-      <tr>
-        <td>Strength-Hypertrophy</td>
-        <td>5–8</td>
-        <td>Strength + denser musculature</td>
-        <td>6–10 reps</td>
-      </tr>
-
-      <tr>
-        <td>Peak Hybrid Phase</td>
-        <td>9–12</td>
-        <td>Athletic performance + peak aesthetics</td>
-        <td>4–8 heavy / 12–20 isolation</td>
-      </tr>
-    </table>
+    <div class="table-wrapper reveal">
+      <table>
+        <tr>
+          <th>Phase</th>
+          <th>Weeks</th>
+          <th>Focus</th>
+          <th>Rep Style</th>
+        </tr>
+        <tr>
+          <td>Foundation Accumulation</td>
+          <td>1–4</td>
+          <td>Technique, work capacity, hypertrophy base</td>
+          <td>10–15 reps</td>
+        </tr>
+        <tr>
+          <td>Strength-Hypertrophy</td>
+          <td>5–8</td>
+          <td>Strength + denser musculature</td>
+          <td>6–10 reps</td>
+        </tr>
+        <tr>
+          <td>Peak Hybrid Phase</td>
+          <td>9–12</td>
+          <td>Athletic performance + peak aesthetics</td>
+          <td>4–8 heavy / 12–20 isolation</td>
+        </tr>
+      </table>
+    </div>
   </section>
 
-  <section id="weekly" class="card">
-    <h2>Weekly Training Split</h2>
+  <section id="weekly" class="card reveal">
+    <div class="card-header">
+      <i data-lucide="activity" class="card-icon"></i>
+      <h2>Weekly Training Split</h2>
+    </div>
 
     <div class="grid">
 
       <div class="workout-day">
         <h3>Monday — Heavy Chest + Triceps + push power</h3>
-
         <div class="exercise"><strong>Warmup:</strong> Incline walk -5 mins</div>
         <div class="exercise"><strong>Mobility:</strong> Band pull-aparts — 2×20, Arm circles — 20 each direction, Scapular pushups — 2×15, Shoulder dislocations with resistance band — 2×15, Thoracic rotations — 10 each side</div>
         <div class="exercise"><strong>Activation:</strong> Pushup plank hold — 45 sec, Light cable flyes — 2×20, Empty bar bench press — 2 warmup sets</div>
-        
         <div class="exercise"><strong>Explosive Pushups:</strong> 4×5 Bodyweight Explode aggressively from floor. </div>
         <div class="exercise"><strong>Bench Press:</strong> Phase 1: 4×10 | Phase 2: 5×6–8 | Phase 3: 5×4–6</div>
         <div class="exercise"><strong>Incline DB Press:</strong> 4×8–12, Controlled eccentric.</div>
@@ -446,17 +651,15 @@
         <div class="exercise"><strong>Close-Grip Bench press:</strong> 4×8–10</div>
         <div class="exercise"><strong>Overhead Rope Tricep Extensions:</strong> 3×12–15</div>
         <div class="exercise"><strong>Deficit Pushups:</strong> 2×AMRAP</div>
-
         <div class="exercise"><strong>Finisher:</strong> Assault Bike Intervals - 10 mins, 20 sec sprint and 40 sec easy</div>
         <div class="exercise"><strong>Stretch:</strong> Hold 45 sec each. Doorway chest stretch, Overhead tricep stretch, Child’s pose, Cobra stretch, Pec minor wall stretch</div>
       </div>
 
       <div class="workout-day">
         <h3>Tuesday — Heavy Back + Biceps</h3>
-
         <div class="exercise"><strong>Warmup:</strong> Rowing -5 mins, dead hangs, thoracic rotations</div>
         <div class="exercise"><strong>Mobility:</strong> Cat-cow stretch — 15 reps, Band lat stretch — 45 sec, Dead hangs — 2×30 sec, Thoracic opener rotations — 10 each side </div>
-         <div class="exercise"><strong>Activation:</strong>Straight-arm pulldowns — 2×20, Scapular pullups — 2×10</div>
+        <div class="exercise"><strong>Activation:</strong>Straight-arm pulldowns — 2×20, Scapular pullups — 2×10</div>
         <div class="exercise"><strong>Explosive Pullups:</strong> 4×5</div>
         <div class="exercise"><strong>Weighted Pullups:</strong> 4×6–10</div>
         <div class="exercise"><strong>Barbell bent over Rows:</strong> 4×8–10</div>
@@ -466,14 +669,12 @@
         <div class="exercise"><strong>EZ Bar Curls:</strong> 4×8–12</div>
         <div class="exercise"><strong> Incline Dumbbell Curls:</strong> 4×8–12</div>
         <div class="exercise"><strong>Hammer Curls:</strong> 3×12–15</div>
-        
         <div class="exercise"><strong>Finisher:</strong> Rowing Ergometer 8 mins steady Zone 2 pace. </div>
         <div class="exercise"><strong>Stretch:</strong> Hanging lat stretch, bicep wall stretch, Seated forward fold, Thread the needle, Upper trap stretch </div>
       </div>
 
       <div class="workout-day">
         <h3>Wednesday — Heavy Legs + Light Shoulders</h3>
-
         <div class="exercise"><strong>Warmup:</strong> Stairmaster -5 mins</div>
         <div class="exercise"><strong>Mobility:</strong> Deep squat hold — 60 sec, Walking lunges — 2×20, Leg swings — 15 each, Hip openers — 10 each side, Ankle mobility rocks — 15 each </div>
         <div class="exercise"><strong>Activation:</strong> Glute bridges — 2×20, Bodyweight squats — 2×20</div>
@@ -485,17 +686,14 @@
         <div class="exercise"><strong>standing Calf Raises:</strong> 5×15–20</div>
         <div class="exercise"><strong>seated Lateral Raises:</strong> 4×15–20</div>
         <div class="exercise"><strong> Rear delt flyes:</strong> 4×15–20</div>
-
         <div class="exercise"><strong>Incline Walk Finisher:</strong> 12 mins Steady incline pace. </div>
         <div class="exercise"><strong>Stretch:</strong> Pigeon pose, couch stretch, hamstring stretch, Calf wall stretch, Butterfly stretch</div>
       </div>
 
       <div class="workout-day">
         <h3>Thursday — Abs + Forearms + Mobility. Purpose: Neural recovery day disguised as training.</h3>
-
         <div class="exercise"><strong>Warmup:</strong> pulse raise : light cycling -5 mins </div>
         <div class="exercise"><strong>Mobility flow :</strong> World’s greatest stretch, Cat-cow, Thoracic rotations, Hip flexor mobility, Shoulder openers - 2 rounds.</div>
-
         <div class="exercise"><strong>Hanging Leg Raises:</strong> 4×15</div>
         <div class="exercise"><strong>Ab Wheel Rollouts:</strong> 4×10–15</div>
         <div class="exercise"><strong>Cable Crunches:</strong> 4×15</div>
@@ -505,20 +703,15 @@
         <div class="exercise"><strong> Reverse EZ-Bar Curls </strong> 3× 15 </div>
         <div class="exercise"><strong> wrist curls </strong> 3×20 </div>
         <div class="exercise"><strong> zottman curl / dead hangs </strong> 3× 45 sec each</div>
-
-
         <div class="exercise"><strong>Conditioning:</strong> Sled Pushes / Battle Ropes / Assault Bike / Shadow Boxing - 15 mins </div>
         <div class="exercise"><strong>Mobility:</strong> Jefferson curl stretch, Wrist flexor stretch, Wrist extensor stretch, Cobra pose, Deep breathing - 10 mins total.</div>
       </div>
 
       <div class="workout-day">
         <h3>Friday — Chest Hypertrophy + Explosive Push</h3> 
-
-        
         <div class="exercise"><strong>Warmup:</strong> Incline walk -5 mins</div>
         <div class="exercise"><strong>Mobility:</strong> Band pull-aparts — 2×20, Arm circles — 20 each direction, Scapular pushups — 2×15, Shoulder dislocations with resistance band — 2×15, Thoracic rotations — 10 each side</div>
         <div class="exercise"><strong>Activation:</strong> Pushup plank hold — 45 sec, Light cable flyes — 2×20, Empty bar bench press — 2 warmup sets</div>
-        
         <div class="exercise"><strong> bench Press:</strong> 4×10–15</div>
         <div class="exercise"><strong>Incline Machine Press:</strong> 4×10–15</div>
         <div class="exercise"><strong>Flat Dumbell Press:</strong> 4×10–12</div>
@@ -527,21 +720,16 @@
         <div class="exercise"><strong>Dips:</strong> 3×AMRAP</div>
         <div class="exercise"><strong> Rope Pushdowns:</strong> 4×12–15</div>
         <div class="exercise"><strong> reverse tricep curls</strong> 3×12–15</div>
-        
         <div class="exercise"><strong>Finisher:</strong> 10 burpees  </div>
         <div class="exercise"><strong>Stretch:</strong> Chest opener stretch, Tricep stretch, Thoracic opener, Child’s pose </div>
       </div>
 
       <div class="workout-day">
         <h3>Saturday — Back Hypertrophy + Athletic Pull</h3> 
-
          <h3>Tuesday — Heavy Back + Biceps</h3>
-
         <div class="exercise"><strong>Warmup:</strong> Rowing -5 mins, dead hangs, thoracic rotations</div>
         <div class="exercise"><strong>Mobility:</strong> Cat-cow stretch — 15 reps, Band lat stretch — 45 sec, Dead hangs — 2×30 sec, Thoracic opener rotations — 10 each side </div>
         <div class="exercise"><strong>Activation:</strong>Straight-arm pulldowns — 2×20, Scapular pullups — 2×10</div>
-
-        
         <div class="exercise"><strong>Chinups:</strong> 4×AMRAP</div>
         <div class="exercise"><strong>T-Bar Rows:</strong> 4×8–12</div>
         <div class="exercise"><strong>Single Arm Cable Rows:</strong> 4×12</div>
@@ -551,19 +739,15 @@
         <div class="exercise"><strong>Cable Curls:</strong> 4×10–12</div>
         <div class="exercise"><strong> Hammer Curls:</strong> 4×10–12</div>
         <div class="exercise"><strong>Renegade Rows:</strong> 3×12</div>
-
         <div class="exercise"><strong>Conditioning:</strong>  Battle Rope Intervals -10 rounds (20s hard / 40s easy)</div>
         <div class="exercise"><strong>Stretch:</strong> Hanging stretch, Lat stretch, Bicep stretch, Thoracic rotation stretch </div>
       </div>
       
-
       <div class="workout-day">
         <h3>Sunday — Heavy Shoulders + Light Legs + Recovery Conditioning</h3>
-
         <div class="exercise"><strong>Warmup:</strong> Incline walk — 5 mins </div>
         <div class="exercise"><strong>Mobility:</strong> Shoulder CARs — 10 each, Band pull-aparts — 20, Hip mobility flow, Deep squat hold — 60 sec</div>
-<div class="exercise"><strong>Activation:</strong> Light lateral raises, Empty bar overhead press</div>
-
+        <div class="exercise"><strong>Activation:</strong> Light lateral raises, Empty bar overhead press</div>
         <div class="exercise"><strong>Push Press shoulder:</strong> 4×5</div>
         <div class="exercise"><strong>Standing Overhead press:</strong> 5×6–8</div>
         <div class="exercise"><strong>Arnold Press:</strong> 4×8–12</div>
@@ -573,78 +757,82 @@
         <div class="exercise"><strong> seated Leg Curls:</strong> 3×15–20</div>
         <div class="exercise"><strong> Leg extensions :</strong> 3×15–20</div>
         <div class="exercise"><strong>Pistol Squat Practice:</strong> 3×AMRAP</div>
-
         <div class="exercise">Recovery conditioning <strong>Zone 2 Cardio:</strong> 15 mins nasal breathing</div>
         <div class="exercise"><strong>Stretch:</strong> Shoulder stretch, Hip flexor stretch, Hamstring stretch, Quad stretch, Deep breathing cooldown </div>
+      </div>
 
     </div>
   </section>
 
-  <section id="checklist" class="card">
-    <h2>Daily Execution Checklist</h2>
+  <section id="checklist" class="card reveal">
+    <div class="card-header">
+      <i data-lucide="check-square" class="card-icon"></i>
+      <h2>Daily Execution Checklist</h2>
+    </div>
 
     <div class="checklist">
-
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Completed warmup and mobility</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Finished main workout</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Completed conditioning finisher</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Completed stretching cooldown</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Hit protein target</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>Drank 3–4L water</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>8000–12000 steps completed</span>
-      </div>
+      </label>
 
-      <div class="checklist-item">
+      <label class="checklist-item">
         <input type="checkbox" class="task">
         <span>7.5–9 hours sleep target</span>
-      </div>
-
+      </label>
     </div>
 
     <div class="progress-container">
       <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <p id="progressText" style="margin-top:15px; color:#3b82f6; font-weight: bold; font-size: 1.1rem;">
+    <p id="progressText" style="margin-top:20px; color:var(--primary-dark); font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; text-align: center;">
       Progress: 0%
     </p>
 
   </section>
 
-  <section id="tracking" class="card">
-  <h2>90-Day Workout Tracking System</h2>
+  <section id="tracking" class="card reveal">
+  <div class="card-header">
+    <i data-lucide="trending-up" class="card-icon"></i>
+    <h2>90-Day Workout Tracking System</h2>
+  </div>
 
-  <p style="margin-bottom:20px;color:#6b7280;">
+  <p style="margin-bottom:25px;color:var(--text-muted);font-size: 1.05rem;">
     Daily tracking system from 11/05/2026 through the next 12 weeks. All progress automatically saves using browser localStorage and works perfectly on Vercel deployment.
   </p>
 
-  <div style="overflow-x:auto;">
+  <div class="table-wrapper">
     <table id="trackingTable">
       <thead>
         <tr>
@@ -664,13 +852,16 @@
   </div>
 </section>
 
-<section id="recovery" class="card">
-    <h2>Recovery System</h2>
+<section id="recovery" class="card reveal">
+    <div class="card-header">
+      <i data-lucide="shield-plus" class="card-icon"></i>
+      <h2>Recovery System</h2>
+    </div>
 
     <div class="grid">
 
-      <div>
-        <h3>Daily Recovery</h3>
+      <div class="workout-day">
+        <h3><i data-lucide="moon"></i> Daily Recovery</h3>
         <ul>
           <li>7.5–9 hours sleep</li>
           <li>3–4L water</li>
@@ -680,8 +871,8 @@
         </ul>
       </div>
 
-      <div>
-        <h3>Deload Weeks</h3>
+      <div class="workout-day">
+        <h3><i data-lucide="battery-charging"></i> Deload Weeks</h3>
         <ul>
           <li>Week 4</li>
           <li>Week 8</li>
@@ -691,8 +882,8 @@
         </ul>
       </div>
 
-      <div>
-        <h3>Execution Rules</h3>
+      <div class="workout-day">
+        <h3><i data-lucide="alert-circle"></i> Execution Rules</h3>
         <ul>
           <li>Technique over ego</li>
           <li>Recovery drives growth</li>
@@ -712,6 +903,26 @@
 </footer>
 
 <script>
+  // Initialize aesthetic icons
+  lucide.createIcons();
+
+  // Scroll Reveal Animations Engine
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.classList.add('active');
+        revealObserver.unobserve(entry.target); // Only animate once
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  });
+  
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // --- Checklist Logic ---
   const checkboxes = document.querySelectorAll('.task');
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
@@ -747,66 +958,68 @@
   });
 
   loadChecklist();
-const trackingBody = document.querySelector('#trackingTable tbody');
 
-const split = [
-  'Heavy Chest + Triceps + Push Power',
-  'Heavy Back + Biceps + Pull Strength',
-  'Heavy Legs + Light Shoulders',
-  'Abs + Forearms + Conditioning',
-  'Chest + Triceps Hypertrophy',
-  'Back + Biceps Athletic Pull',
-  'Heavy Shoulders + Light Legs'
-];
+  // --- 90-Day Tracking Logic ---
+  const trackingBody = document.querySelector('#trackingTable tbody');
 
-function generateTracking() {
-  const startDate = new Date('2026-05-11');
+  const split = [
+    'Heavy Chest + Triceps + Push Power',
+    'Heavy Back + Biceps + Pull Strength',
+    'Heavy Legs + Light Shoulders',
+    'Abs + Forearms + Conditioning',
+    'Chest + Triceps Hypertrophy',
+    'Back + Biceps Athletic Pull',
+    'Heavy Shoulders + Light Legs'
+  ];
 
-  for(let i = 0; i < 90; i++) {
-    const current = new Date(startDate);
-    current.setDate(startDate.getDate() + i);
+  function generateTracking() {
+    const startDate = new Date('2026-05-11');
 
-    const row = document.createElement('tr');
+    for(let i = 0; i < 90; i++) {
+      const current = new Date(startDate);
+      current.setDate(startDate.getDate() + i);
 
-    const saved = JSON.parse(localStorage.getItem('track-' + i)) || {};
+      const row = document.createElement('tr');
 
-    row.innerHTML = `
-      <td>${current.toDateString()}</td>
-      <td>${split[i % 7]}</td>
-      <td><input type="checkbox" class="tracker" data-id="${i}" ${saved.completed ? 'checked' : ''}></td>
-      <td><input type="checkbox" class="tracker-cardio" data-id="${i}" ${saved.cardio ? 'checked' : ''}></td>
-      <td><input type="checkbox" class="tracker-mobility" data-id="${i}" ${saved.mobility ? 'checked' : ''}></td>
-      <td><input type="checkbox" class="tracker-sleep" data-id="${i}" ${saved.sleep ? 'checked' : ''}></td>
-      <td><input type="checkbox" class="tracker-protein" data-id="${i}" ${saved.protein ? 'checked' : ''}></td>
-      <td><input type="number" step="0.1" class="tracker-weight" data-id="${i}" value="${saved.weight || ''}" placeholder="kg"></td>
-      <td><input type="text" class="tracker-note" data-id="${i}" value="${saved.note || ''}" placeholder="Performance / fatigue / PRs"></td>
-    `;
+      const saved = JSON.parse(localStorage.getItem('track-' + i)) || {};
 
-    trackingBody.appendChild(row);
+      row.innerHTML = `
+        <td style="font-weight: 700;">${current.toDateString()}</td>
+        <td style="color: var(--primary); font-weight: 600;">${split[i % 7]}</td>
+        <td><input type="checkbox" class="tracker" data-id="${i}" ${saved.completed ? 'checked' : ''}></td>
+        <td><input type="checkbox" class="tracker-cardio" data-id="${i}" ${saved.cardio ? 'checked' : ''}></td>
+        <td><input type="checkbox" class="tracker-mobility" data-id="${i}" ${saved.mobility ? 'checked' : ''}></td>
+        <td><input type="checkbox" class="tracker-sleep" data-id="${i}" ${saved.sleep ? 'checked' : ''}></td>
+        <td><input type="checkbox" class="tracker-protein" data-id="${i}" ${saved.protein ? 'checked' : ''}></td>
+        <td><input type="number" step="0.1" class="tracker-weight" data-id="${i}" value="${saved.weight || ''}" placeholder="kg"></td>
+        <td><input type="text" class="tracker-note" data-id="${i}" value="${saved.note || ''}" placeholder="Performance / fatigue / PRs"></td>
+      `;
+
+      trackingBody.appendChild(row);
+    }
+
+    document.querySelectorAll('.tracker, .tracker-cardio, .tracker-mobility, .tracker-sleep, .tracker-protein, .tracker-weight, .tracker-note').forEach(el => {
+      el.addEventListener('change', saveTracking);
+    });
   }
 
-  document.querySelectorAll('.tracker, .tracker-cardio, .tracker-mobility, .tracker-sleep, .tracker-protein, .tracker-weight, .tracker-note').forEach(el => {
-    el.addEventListener('change', saveTracking);
-  });
-}
+  function saveTracking() {
+    for(let i = 0; i < 90; i++) {
+      const data = {
+        completed: document.querySelector('.tracker[data-id="' + i + '"]')?.checked || false,
+        cardio: document.querySelector('.tracker-cardio[data-id="' + i + '"]')?.checked || false,
+        mobility: document.querySelector('.tracker-mobility[data-id="' + i + '"]')?.checked || false,
+        sleep: document.querySelector('.tracker-sleep[data-id="' + i + '"]')?.checked || false,
+        protein: document.querySelector('.tracker-protein[data-id="' + i + '"]')?.checked || false,
+        weight: document.querySelector('.tracker-weight[data-id="' + i + '"]')?.value || '',
+        note: document.querySelector('.tracker-note[data-id="' + i + '"]')?.value || ''
+      };
 
-function saveTracking() {
-  for(let i = 0; i < 90; i++) {
-    const data = {
-      completed: document.querySelector('.tracker[data-id="' + i + '"]')?.checked || false,
-      cardio: document.querySelector('.tracker-cardio[data-id="' + i + '"]')?.checked || false,
-      mobility: document.querySelector('.tracker-mobility[data-id="' + i + '"]')?.checked || false,
-      sleep: document.querySelector('.tracker-sleep[data-id="' + i + '"]')?.checked || false,
-      protein: document.querySelector('.tracker-protein[data-id="' + i + '"]')?.checked || false,
-      weight: document.querySelector('.tracker-weight[data-id="' + i + '"]')?.value || '',
-      note: document.querySelector('.tracker-note[data-id="' + i + '"]')?.value || ''
-    };
-
-    localStorage.setItem('track-' + i, JSON.stringify(data));
+      localStorage.setItem('track-' + i, JSON.stringify(data));
+    }
   }
-}
 
-generateTracking();
+  generateTracking();
 </script>
 
 </body>
