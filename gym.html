@@ -681,11 +681,17 @@ function todayView(){
   out+='<h2>Body and recovery</h2><div class="fields">'+numField('m:weight','Body weight (kg)',m.weight,'77')+numField('m:sleep','Sleep last night (h)',m.sleep,'7.5')+numField('m:protein','Protein (g)',m.protein,'125')+numField('m:steps','Steps',m.steps,'9000','1')+'</div>';
   out+='<label class="fld" style="margin-top:12px"><span>Notes</span><textarea data-p="note" placeholder="How it felt, what to change next time">'+esc(log.note||'')+'</textarea></label>';
 
-  out+='<h2>Progress photo</h2>'
-    +'<p class="muted small" style="margin:0 0 10px">Opens your phone\'s camera app — full quality, back camera, zoom, whatever your phone does best. Saved to Drive as <b>progress_'+esc(date)+'.jpg</b></p>'
-    +'<label class="btn ghost photo-label" for="photoInput">📷 Take / choose photo</label>'
-    +'<input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">'
-    +'<p class="small muted" id="photoMsg" role="status" style="margin:10px 0 0"></p>';
+  out+='<h2>Progress photo</h2>';
+  var authed = driveToken && Date.now() < driveTokenExp;
+  if(!authed){
+    out+='<p class="muted small" style="margin:0 0 10px">Tap Connect once, then take photos freely. Google sign-in needs its own tap to work on phones.</p>'
+      +'<button type="button" class="btn" data-act="drive-connect">🔗 Connect Google Drive</button>';
+  } else {
+    out+='<p class="muted small" style="margin:0 0 10px">Opens your phone\'s camera. Full quality, back camera. Saved to Drive as <b>progress_'+esc(date)+'.jpg</b></p>'
+      +'<label class="btn ghost photo-label" for="photoInput">📷 Take / choose photo</label>'
+      +'<input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">';
+  }
+  out+='<p class="small muted" id="photoMsg" role="status" style="margin:10px 0 0"></p>';
 
   if(d.train) out+='<div style="margin:18px 0 0"><button type="button" class="btn plate" id="finishbtn" data-act="finish">'+(log.finished?'Session marked done. Tap to undo':'Mark session done')+'</button></div>';
   out+='</div>';
@@ -981,6 +987,7 @@ app.addEventListener('click',function(e){
   else if(a==='toggle-bool'){var l4=ensureLog(ui.date),f=b.dataset.f;l4[f]=!l4[f];b.setAttribute('aria-pressed',l4[f]?'true':'false');scheduleSave(ui.date)}
   else if(a==='finish'){var l5=ensureLog(ui.date);l5.finished=!l5.finished;b.textContent=l5.finished?'Session marked done. Tap to undo':'Mark session done';scheduleSave(ui.date);refreshDay()}
   else if(a==='plan-sec'){ui.planSec=b.dataset.s;render();}
+  else if(a==='drive-connect'){ connectDrive(); }
   else if(a==='backup-copy'){
     var txt=JSON.stringify({app:'gymlog',v:1,start:state.start,logs:state.logs});
     var bx=$('#restoreBox'), bm=$('#bkmsg');
@@ -1016,48 +1023,98 @@ Array.prototype.forEach.call(document.querySelectorAll('nav.tabs button'),functi
   b.addEventListener('click',function(){ui.tab=b.dataset.tab;render();window.scrollTo(0,0)});
 });
 
-/* ==================== PROGRESS PHOTO -> GOOGLE DRIVE ====================
-   Credentials already filled in.
-   ===================================================================== */
+/* ==================== PROGRESS PHOTO -> GOOGLE DRIVE ==================== */
 var DRIVE_FOLDER_ID = '1BYoF7tGYbTYDXgg9riKAhVLhYzNTY_hO';
 var DRIVE_CLIENT_ID = '271031247788-m2k3ah6a7pp8sgq2ejtv8dg9lfkn8rdb.apps.googleusercontent.com';
 var DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
+var driveToken = null;
+var driveTokenExp = 0;
+
 function photoMsg(t){ var m=$('#photoMsg'); if(m) m.textContent=t; }
 
-// Native camera file picker — fires when the user takes or picks a photo
+function isInAppBrowser(){
+  var ua = navigator.userAgent || '';
+  if(/Instagram/i.test(ua)) return 'Instagram';
+  if(/FBAN|FBAV/i.test(ua)) return 'Facebook';
+  if(/WhatsApp/i.test(ua)) return 'WhatsApp';
+  if(/musical_ly|BytedanceWebview/i.test(ua)) return 'TikTok';
+  if(/GSA\//i.test(ua)) return 'the Google app';
+  if(/\bwv\b/i.test(ua) && /Chrome/i.test(ua)) return 'an in-app browser';
+  return null;
+}
+
+function connectDrive(){
+  if(!window.google || !google.accounts || !google.accounts.oauth2){
+    photoMsg('Google script still loading. Wait 2 seconds and tap again.');
+    return;
+  }
+  var inApp = isInAppBrowser();
+  if(inApp){
+    photoMsg('You are in ' + inApp + '. Open this page in Chrome or Safari — Google sign-in does not work in in-app browsers.');
+    return;
+  }
+  photoMsg('Opening Google sign-in…');
+  try{
+    google.accounts.oauth2.initTokenClient({
+      client_id: DRIVE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: function(resp){
+        if(resp.error){
+          photoMsg('Sign-in failed: ' + resp.error);
+          return;
+        }
+        driveToken = resp.access_token;
+        driveTokenExp = Date.now() + ((resp.expires_in || 3600) * 1000) - 60000;
+        render();
+        photoMsg('✓ Connected. Tap the photo button to take your pic.');
+      },
+      error_callback: function(){
+        photoMsg('Sign-in popup was blocked. Allow popups for this site, then tap again.');
+      }
+    }).requestAccessToken();
+  }catch(e){
+    photoMsg('Sign-in failed: ' + (e.message || e));
+  }
+}
+
+// Silent token refresh on page load — works for repeat users who already consented
+function silentDriveAuth(){
+  if(!window.google || !google.accounts || !google.accounts.oauth2) return;
+  if(isInAppBrowser()) return;
+  try{
+    google.accounts.oauth2.initTokenClient({
+      client_id: DRIVE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: function(resp){
+        if(resp && resp.access_token){
+          driveToken = resp.access_token;
+          driveTokenExp = Date.now() + ((resp.expires_in || 3600) * 1000) - 60000;
+          if(ui.tab === 'today') render();
+        }
+      }
+    }).requestAccessToken({prompt: ''});
+  }catch(e){ /* silent fail is fine */ }
+}
+
+// File selected → upload using the stored token
 document.addEventListener('change', function(e){
   if(e.target && e.target.id === 'photoInput'){
     var file = e.target.files && e.target.files[0];
     if(!file) return;
+    if(!driveToken || Date.now() > driveTokenExp){
+      photoMsg('Session expired. Tap Connect Google Drive again.');
+      render();
+      return;
+    }
     uploadToDrive(file, ui.date);
-    e.target.value = ''; // reset so you can retake the same photo filename
+    e.target.value = '';
   }
 });
 
 function uploadToDrive(file, dateStr){
-  if(!window.google || !google.accounts || !google.accounts.oauth2){
-    photoMsg('Google sign-in script not loaded yet. Wait a second and try again.');
-    return;
-  }
-  photoMsg('Signing in to Google…');
-  google.accounts.oauth2.initTokenClient({
-    client_id: DRIVE_CLIENT_ID,
-    scope: DRIVE_SCOPE,
-    callback: function(tokenResp){
-      if(!tokenResp || !tokenResp.access_token){
-        photoMsg('Google sign-in was cancelled.');
-        return;
-      }
-      doUpload(tokenResp.access_token, file, dateStr);
-    }
-  }).requestAccessToken();
-}
-
-function doUpload(accessToken, file, dateStr){
   photoMsg('Uploading ' + Math.round(file.size / 1024) + ' KB…');
   var fileName = 'progress_' + dateStr + '.jpg';
-
   var metadata = { name: fileName, parents: [DRIVE_FOLDER_ID] };
   var form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type:'application/json'}));
@@ -1065,10 +1122,17 @@ function doUpload(accessToken, file, dateStr){
 
   fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink', {
     method: 'POST',
-    headers: { Authorization: 'Bearer ' + accessToken },
+    headers: { Authorization: 'Bearer ' + driveToken },
     body: form
   })
-  .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(function(r){
+    if(r.status === 401){
+      driveToken = null;
+      throw new Error('Session expired. Tap Connect Google Drive again.');
+    }
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
   .then(function(data){
     photoMsg('✓ Saved: ' + data.name);
     console.log('Drive file:', data.webViewLink);
@@ -1077,6 +1141,9 @@ function doUpload(accessToken, file, dateStr){
     photoMsg('Upload failed: ' + err.message);
   });
 }
+
+// Try a silent token refresh 1.5s after load (works if you've signed in before)
+setTimeout(silentDriveAuth, 1500);
 
 render();
 initStorage();
