@@ -52,7 +52,11 @@ h3{font-size:19px}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-stretch:75%;font-weight:800;font-size:22px;letter-spacing:-.01em}
 .tag{display:block;font-stretch:75%;font-weight:700;font-size:13px;color:var(--red);letter-spacing:.01em;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
 #sync{font-size:12px;color:var(--ink2)}
+.home-btn{font-size:22px;text-decoration:none;color:var(--ink2);width:40px;height:40px;display:grid;place-items:center;border-radius:50%;flex:0 0 auto;line-height:1}
+.home-btn:hover,.home-btn:focus-visible{background:var(--field);color:var(--ink);outline:none}
+@media(max-width:420px){#sync{display:none}}
 
 /* nav */
 nav.tabs{
@@ -173,6 +177,9 @@ textarea{height:auto;min-height:84px;padding:10px;font-weight:400;font-size:16px
 .tog{min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid var(--ink2);background:transparent;font-weight:600}
 .tog[aria-pressed="true"]{background:var(--pb);color:var(--pf);border-color:var(--pr)}
 
+/* photo */
+.photo-label{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+
 /* plan */
 .seg{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 4px}
 .seg button{min-height:40px;padding:0 14px;border:1.5px solid var(--line);background:transparent;border-radius:999px;font-weight:700}
@@ -221,8 +228,7 @@ select.sel{height:46px;width:100%;border:1.5px solid var(--line);background:var(
 .logrow .b{color:var(--ink2);font-size:14px;white-space:nowrap}
 .tbl{width:100%;font-size:14px;min-width:0}
 .tbl td{padding:6px 8px 6px 0}
-.home-btn{font-size:22px;text-decoration:none;color:var(--ink2);width:44px;height:44px;display:grid;place-items:center;border-radius:50%;flex:0 0 auto}
-.home-btn:hover{background:var(--field);color:var(--ink)}
+
 /* rest timer */
 .rest{
   position:fixed;left:0;right:0;z-index:30;background:var(--ink);color:var(--bg);
@@ -249,8 +255,10 @@ select.sel{height:46px;width:100%;border:1.5px solid var(--line);background:var(
     <span class="brand">Gym log</span>
     <span class="tag">U got it BITCH!! hit the gym, lift the weights</span>
   </div>
-  <span id="sync"></span>
-<a href="index.html" class="home-btn" aria-label="Back to home">⌂</a>
+  <div class="header-right">
+    <span id="sync"></span>
+    <a href="index.html" class="home-btn" aria-label="Back to home">⌂</a>
+  </div>
 </div></header>
 <main id="app" class="wrap" aria-live="polite"></main>
 
@@ -672,16 +680,13 @@ function todayView(){
   var m=log.m||{};
   out+='<h2>Body and recovery</h2><div class="fields">'+numField('m:weight','Body weight (kg)',m.weight,'77')+numField('m:sleep','Sleep last night (h)',m.sleep,'7.5')+numField('m:protein','Protein (g)',m.protein,'125')+numField('m:steps','Steps',m.steps,'9000','1')+'</div>';
   out+='<label class="fld" style="margin-top:12px"><span>Notes</span><textarea data-p="note" placeholder="How it felt, what to change next time">'+esc(log.note||'')+'</textarea></label>';
+
   out+='<h2>Progress photo</h2>'
-    +'<p class="muted small" style="margin:0 0 8px">Take today\'s pic. It will be saved to your Drive folder using the date as the filename.</p>'
-    +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
-    +'<button type="button" class="btn ghost" id="photoStart" data-act="photo-start">Open camera</button>'
-    +'<button type="button" class="btn" id="photoSnap" data-act="photo-snap" style="display:none">Capture</button>'
-    +'<button type="button" class="btn ghost" id="photoCancel" data-act="photo-cancel" style="display:none">Cancel</button>'
-    +'</div>'
-    +'<video id="photoVideo" playsinline autoplay muted style="display:none;width:100%;max-width:360px;border-radius:8px;margin-top:10px;background:#000"></video>'
-    +'<canvas id="photoCanvas" style="display:none"></canvas>'
-    +'<p class="small muted" id="photoMsg" role="status" style="margin:8px 0 0"></p>';
+    +'<p class="muted small" style="margin:0 0 10px">Opens your phone\'s camera app — full quality, back camera, zoom, whatever your phone does best. Saved to Drive as <b>progress_'+esc(date)+'.jpg</b></p>'
+    +'<label class="btn ghost photo-label" for="photoInput">📷 Take / choose photo</label>'
+    +'<input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">'
+    +'<p class="small muted" id="photoMsg" role="status" style="margin:10px 0 0"></p>';
+
   if(d.train) out+='<div style="margin:18px 0 0"><button type="button" class="btn plate" id="finishbtn" data-act="finish">'+(log.finished?'Session marked done. Tap to undo':'Mark session done')+'</button></div>';
   out+='</div>';
   return out;
@@ -1012,99 +1017,66 @@ Array.prototype.forEach.call(document.querySelectorAll('nav.tabs button'),functi
 });
 
 /* ==================== PROGRESS PHOTO -> GOOGLE DRIVE ====================
-   ⚠️ FILL THESE TWO VALUES AFTER YOU FINISH GOOGLE CLOUD SETUP
-   ------------------------------------------------------------------ */
-var DRIVE_FOLDER_ID = '1BYoF7tGYbTYDXgg9riKAhVLhYzNTY_hO';           // <-- line A
-var DRIVE_CLIENT_ID = '271031247788-m2k3ah6a7pp8sgq2ejtv8dg9lfkn8rdb.apps.googleusercontent.com'; // <-- line B
-/* ===================================================================== */
-
+   Credentials already filled in.
+   ===================================================================== */
+var DRIVE_FOLDER_ID = '1BYoF7tGYbTYDXgg9riKAhVLhYzNTY_hO';
+var DRIVE_CLIENT_ID = '271031247788-m2k3ah6a7pp8sgq2ejtv8dg9lfkn8rdb.apps.googleusercontent.com';
 var DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-var photoStream = null;
-
-function stopPhotoStream(){
-  if(photoStream){ photoStream.getTracks().forEach(function(t){t.stop()}); photoStream=null; }
-  var v=$('#photoVideo'); if(v){ v.srcObject=null; v.style.display='none'; }
-}
 
 function photoMsg(t){ var m=$('#photoMsg'); if(m) m.textContent=t; }
 
-function openCamera(){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    photoMsg('Camera not available in this browser.'); return;
+// Native camera file picker — fires when the user takes or picks a photo
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id === 'photoInput'){
+    var file = e.target.files && e.target.files[0];
+    if(!file) return;
+    uploadToDrive(file, ui.date);
+    e.target.value = ''; // reset so you can retake the same photo filename
   }
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:1280}},audio:false})
-    .then(function(stream){
-      photoStream=stream;
-      var v=$('#photoVideo'); v.srcObject=stream; v.style.display='block';
-      $('#photoStart').style.display='none';
-      $('#photoSnap').style.display='inline-block';
-      $('#photoCancel').style.display='inline-block';
-      photoMsg('');
-    })
-    .catch(function(err){ photoMsg('Could not open camera: '+err.message); });
-}
+});
 
-function captureAndUpload(){
-  if(!photoStream){ photoMsg('Camera is not open.'); return; }
-  var v=$('#photoVideo');
-  var c=$('#photoCanvas');
-  var w=v.videoWidth, h=v.videoHeight;
-  if(!w||!h){ photoMsg('Camera is still warming up. Try again in a second.'); return; }
-  c.width=w; c.height=h;
-  c.getContext('2d').drawImage(v,0,0,w,h);
-  c.toBlob(function(blob){
-    if(!blob){ photoMsg('Could not capture frame.'); return; }
-    stopPhotoStream();
-    $('#photoSnap').style.display='none';
-    $('#photoCancel').style.display='none';
-    $('#photoStart').style.display='inline-block';
-    uploadToDrive(blob, ui.date);
-  },'image/jpeg',0.9);
-}
-
-function uploadToDrive(blob,dateStr){
-  if(!window.google||!google.accounts||!google.accounts.oauth2){
-    photoMsg('Google sign-in script not loaded yet. Wait a second and try again.'); return;
+function uploadToDrive(file, dateStr){
+  if(!window.google || !google.accounts || !google.accounts.oauth2){
+    photoMsg('Google sign-in script not loaded yet. Wait a second and try again.');
+    return;
   }
   photoMsg('Signing in to Google…');
   google.accounts.oauth2.initTokenClient({
     client_id: DRIVE_CLIENT_ID,
     scope: DRIVE_SCOPE,
     callback: function(tokenResp){
-      if(!tokenResp||!tokenResp.access_token){ photoMsg('Google sign-in was cancelled.'); return; }
-      doUpload(tokenResp.access_token, blob, dateStr);
+      if(!tokenResp || !tokenResp.access_token){
+        photoMsg('Google sign-in was cancelled.');
+        return;
+      }
+      doUpload(tokenResp.access_token, file, dateStr);
     }
   }).requestAccessToken();
 }
 
-function doUpload(accessToken, blob, dateStr){
-  photoMsg('Uploading…');
-  var fileName = 'progress_'+dateStr+'.jpg';
+function doUpload(accessToken, file, dateStr){
+  photoMsg('Uploading ' + Math.round(file.size / 1024) + ' KB…');
+  var fileName = 'progress_' + dateStr + '.jpg';
+
   var metadata = { name: fileName, parents: [DRIVE_FOLDER_ID] };
   var form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type:'application/json'}));
-  form.append('file', blob, fileName);
+  form.append('file', file, fileName);
+
   fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink', {
     method: 'POST',
-    headers: { Authorization: 'Bearer '+accessToken },
+    headers: { Authorization: 'Bearer ' + accessToken },
     body: form
   })
-  .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(function(data){
-    photoMsg('Saved: '+data.name);
+    photoMsg('✓ Saved: ' + data.name);
     console.log('Drive file:', data.webViewLink);
   })
-  .catch(function(err){ photoMsg('Upload failed: '+err.message); });
+  .catch(function(err){
+    photoMsg('Upload failed: ' + err.message);
+  });
 }
-
-document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-act]');
-  if(!b) return;
-  var a = b.dataset.act;
-  if(a==='photo-start') openCamera();
-  else if(a==='photo-snap') captureAndUpload();
-  else if(a==='photo-cancel'){ stopPhotoStream(); $('#photoSnap').style.display='none'; $('#photoCancel').style.display='none'; $('#photoStart').style.display='inline-block'; }
-});
 
 render();
 initStorage();
