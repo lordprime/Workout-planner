@@ -8,7 +8,7 @@
 <style>
   :root{
     --bg:#0a0a0a; --card:#111; --line:#222; --ink:#fff; --ink2:#8a8a8a;
-    --gym:#c8362d; --meal:#2b8f55;
+    --gym:#c8362d; --meal:#2b8f55; --new:#2a5db8;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -17,7 +17,7 @@
     font:400 16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
     display:grid;place-items:center;padding:24px;min-height:100dvh;
   }
-  .hero{max-width:560px;width:100%}
+  .hero{max-width:640px;width:100%}
   .brand{
     font-weight:800;font-size:12px;letter-spacing:.22em;
     color:var(--ink2);text-transform:uppercase;margin-bottom:18px;text-align:center;
@@ -26,15 +26,20 @@
     font-size:clamp(34px,8vw,52px);font-weight:900;letter-spacing:-.035em;
     line-height:1.02;margin:0 0 10px;text-align:center;
   }
-  .sub{color:var(--ink2);text-align:center;margin:0 0 40px;font-size:15px}
-  .choices{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sub{color:var(--ink2);text-align:center;margin:0 0 32px;font-size:15px}
+  .section-label{
+    font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink2);margin:0 0 10px 2px;
+  }
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
   @media(max-width:520px){.choices{grid-template-columns:1fr}}
   .choice{
     --accent:#666;
     display:block;text-decoration:none;color:var(--ink);
-    padding:28px 22px;border-radius:18px;border:2px solid var(--line);
+    padding:22px 18px;border-radius:16px;border:2px solid var(--line);
     background:var(--card);
     transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    position:relative;
   }
   .choice:hover,.choice:focus-visible{
     transform:translateY(-3px);
@@ -42,15 +47,24 @@
     background:#151515;
     outline:none;
   }
-  .choice .icon{font-size:38px;line-height:1;display:block;margin-bottom:16px}
+  .choice .icon{font-size:32px;line-height:1;display:block;margin-bottom:12px}
   .choice h2{
-    font-size:22px;font-weight:900;letter-spacing:-.02em;margin:0 0 5px;
+    font-size:18px;font-weight:900;letter-spacing:-.02em;margin:0 0 4px;
   }
-  .choice p{color:var(--ink2);font-size:13px;margin:0;line-height:1.45}
+  .choice p{color:var(--ink2);font-size:12.5px;margin:0;line-height:1.4}
+  .badge{
+    position:absolute;top:12px;right:12px;
+    font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 8px;border-radius:999px;border:1px solid currentColor;
+  }
   .choice.gym{--accent:var(--gym)}
   .choice.gym .icon{color:var(--gym)}
   .choice.meal{--accent:var(--meal)}
   .choice.meal .icon{color:var(--meal)}
+  .choice.new{--accent:var(--new)}
+  .choice.new .icon{color:var(--new)}
+  .choice.new .badge{color:var(--new)}
+  .choice.old .badge{color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -58,16 +72,36 @@
   <div class="brand">Abhishek</div>
   <h1>What are we doing?</h1>
   <p class="sub">Pick one. Everything saves automatically.</p>
+
+  <p class="section-label">Current plans</p>
   <div class="choices">
-    <a class="choice gym" href="gym.html">
+    <a class="choice gym new" href="gym1.html">
+      <span class="badge">New</span>
       <span class="icon">🏋️</span>
-      <h2>Workout</h2>
-      <p>12-week training plan, lift log, progress photos</p>
+      <h2>Workout · Cut</h2>
+      <p>12-week cut &amp; hypertrophy · 6 lift days</p>
     </a>
-    <a class="choice meal" href="meals.html">
+    <a class="choice meal new" href="food1.html">
+      <span class="badge">New</span>
       <span class="icon">🥗</span>
-      <h2>Food</h2>
-      <p>4-week meal plan, prep schedule</p>
+      <h2>Food · Updated</h2>
+      <p>Updated meal plan &amp; prep schedule</p>
+    </a>
+  </div>
+
+  <p class="section-label">Original plans</p>
+  <div class="choices">
+    <a class="choice gym old" href="gym.html">
+      <span class="badge">Original</span>
+      <span class="icon">🏋️</span>
+      <h2>Workout · Classic</h2>
+      <p>12-week strength + size · Push/Pull/Legs + run</p>
+    </a>
+    <a class="choice meal old" href="meals.html">
+      <span class="badge">Original</span>
+      <span class="icon">🥗</span>
+      <h2>Food · Classic</h2>
+      <p>Original 4-week meal plan &amp; prep schedule</p>
     </a>
   </div>
 </div>
